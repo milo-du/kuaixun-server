@@ -1,2 +1,2 @@
 # kuaixun-server
-快讯科技服务端
+CI框架

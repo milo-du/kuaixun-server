@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class PublisherUser extends CI_Controller
+class PublisherUser extends BaseController
 {
     function __construct()
     {
@@ -10,26 +10,30 @@ class PublisherUser extends CI_Controller
 
     public function login()
     {
-        $mobile = $this->input->get('mobile');
-        $pwd = $this->input->get('pwd');
+        $mobile = $this->input->post('mobile');
+        $pwd = $this->input->post('pwd');
         if (strlen($mobile) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不能为空');
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
             return;
         }
         if (strlen($pwd) == 0) {
             $result = array('ret' => -1, 'msg' => '密码不能为空');
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
             return;
         }
         $this->load->model('publisher_user_model');
         $data = $this->publisher_user_model->login($mobile, $pwd);
         if (count($data) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不存在或者密码错误');
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
         } else {
             $result = array('ret' => 0, 'data' => $data);
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
         }
     }
 
@@ -48,22 +52,26 @@ class PublisherUser extends CI_Controller
         $ip = $this->input->ip_address();
         if (strlen($mobile) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不能为空');
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
             return;
         }
         if (strlen($pwd) == 0) {
             $result = array('ret' => -1, 'msg' => '密码不能为空');
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
             return;
         }
         $this->load->model('publisher_user_model');
         $data = $this->publisher_user_model->register($mobile, $pwd, $ip);
         if ($data) {
             $result = array('ret' => 0, 'msg' => '注册成功',);
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
         } else {
             $result = array('ret' => -1, 'msg' => '注册失败，请稍候重试');
-            $this->output->set_content_type('application/json')->set_output(json_encode($result));
+            $this->result = $result;
+            $this->jsonOutput();
         }
     }
 }

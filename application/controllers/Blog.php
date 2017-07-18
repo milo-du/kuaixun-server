@@ -1,6 +1,6 @@
 <?php
 
-class Blog extends CI_Controller
+class Blog extends SczController
 {
     public function index()
     {

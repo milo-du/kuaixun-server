@@ -28,10 +28,17 @@ class PublisherUser extends BaseController
         $data = $this->publisher_user_model->login($mobile, $pwd);
         if (count($data) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不存在或者密码错误');
-            $this->result = $result;
+            $this->result = $result[0];
             $this->jsonOutput();
         } else {
-            $result = array('ret' => 0, 'data' => $data);
+            $userInfo=$data[0];
+            $userID=$userInfo->userID;
+            $ip = $this->input->ip_address();
+            //更新登录时间和IP
+            $this->publisher_user_model->updateLoginTime($ip, $userID);
+            $token=md5($userID+time());
+            $result = array('ret' => 0, 'data' => { });
+            $_SESSION['token'] =$token;
             $this->result = $result;
             $this->jsonOutput();
         }

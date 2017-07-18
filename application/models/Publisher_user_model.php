@@ -23,9 +23,15 @@ class Publisher_user_model extends CI_Model
         return $query->result();
     }
 
-    public function register($phone,$pwd,$ip)
+    public function register($phone, $pwd, $ip)
     {
-        $sql = "INSERT INTO publisher_users (phone,password,regIP,lastLoginIP) VALUES(".$this->db->escape($phone).",".$this->db->escape($pwd).",".$this->db->escape($ip).",".$this->db->escape($ip).")";
+        $sql = "INSERT INTO publisher_users (phone,password,regIP,lastLoginIP) VALUES(" . $this->db->escape($phone) . "," . $this->db->escape($pwd) . "," . $this->db->escape($ip) . "," . $this->db->escape($ip) . ")";
         return $this->db->simple_query($sql);
+    }
+
+    public function updateLoginTime($ip, $uid)
+    {
+        $sql = "UPDATE publisher_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
+        return $this->db->query($sql, array(time()$ip,,$uid));
     }
 }

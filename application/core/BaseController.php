@@ -37,7 +37,7 @@ class BaseController extends CI_Controller
             }
         } else {
             $this->result['ret'] = 2001;
-            $this->result['msg'] = time(); // '数据异常，请重新登入';
+            $this->result['msg'] = '数据异常，请重新登入';
         }
         $this->jsonOutput();
 

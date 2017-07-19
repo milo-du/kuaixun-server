@@ -31,25 +31,32 @@ class PublisherUser extends BaseController
             $this->result = $result[0];
             $this->jsonOutput();
         } else {
-            $userInfo=$data[0];
-            $userID=$userInfo->userID;
+            $userInfo = $data[0];
+            $userID = $userInfo->userID;
             $ip = $this->input->ip_address();
             //更新登录时间和IP
             $this->publisher_user_model->updateLoginTime($ip, $userID);
-            $token=md5($userID+time());
-            $result = array('ret' => 0, 'data' => { });
-            $_SESSION['token'] =$token;
+            $token = md5($userID + time());
+            $tokenInfo = ['uid' => $userID, 'token' => $token];
+            $result = array('ret' => 0, 'data' => $tokenInfo);
+            $_SESSION['token'] = $token;
+            $_SESSION['expire'] = time();
             $this->result = $result;
             $this->jsonOutput();
         }
     }
 
-    public function get_user_list()
+    function getUserList()
     {
-        $offset = $this->input->get('offset');
+        $this->isLogin();
         $limit = $this->input->get('limit');
+        $offset = $this->input->get('offset');
+        $limit = $limit ? $limit : 0;
+        $offset = $offset ? $offset : 1;
         $this->load->model('publisher_user_model');
-        $data = $this->publisher_user_model->get_user_list($offset, $limit);
+        $data = $this->publisher_user_model->get_user_list($limit, $offset);
+        $this->result = $data;
+        $this->jsonOutput();
     }
 
     public function register()

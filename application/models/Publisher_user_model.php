@@ -9,11 +9,11 @@ class Publisher_user_model extends CI_Model
         return $query->result();
     }
 
-    public function get_user_list($offset, $limit)
+    public function get_user_list($limit = 0, $offset = 10)
     {
-        $sql = 'SELECT * FROM publisher_users limit ?,?';
+        $sql = "SELECT * FROM publisher_users limit $limit,$offset";
         $query = $this->db->query($sql, array($offset, $limit));
-        return $query->result();
+        return $query->result_array();
     }
 
     public function login($mobile, $pwd)
@@ -32,6 +32,6 @@ class Publisher_user_model extends CI_Model
     public function updateLoginTime($ip, $uid)
     {
         $sql = "UPDATE publisher_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
-        return $this->db->query($sql, array(time()$ip,,$uid));
+        return $this->db->query($sql, array(time(), $ip, $uid));
     }
 }

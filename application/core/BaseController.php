@@ -31,16 +31,15 @@ class BaseController extends CI_Controller
         $token = $this->input->get('token');
 
         if (isset($_SESSION['token']) && $_SESSION['token'] == $token) {
-            if ($_SESSION['expire'] + 86400 > time()) {
+            if ($_SESSION['expire'] + 86400 < time()) {
                 $this->result['ret'] = 2000;
                 $this->result['msg'] = '对不起，你的登录已失效，请先登录 ';
+                $this->jsonOutput();
             }
         } else {
             $this->result['ret'] = 2001;
-            $this->result['msg'] = '数据异常，请重新登入';
+            $this->result['msg'] = '您未登录，请先登录';
+            $this->jsonOutput();
         }
-        $this->jsonOutput();
-
     }
-
 }

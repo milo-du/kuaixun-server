@@ -10,7 +10,11 @@ class PublisherJob extends BaseController
 
     function getList()
     {
-        $this->isPublisherLogin();
+        //$this->isPublisherLogin();
+        $this->load->model('Publisher_job_model');
+        $result = $this->Publisher_job_model->getJobList(10000, 0, 10);
+        $this->result = $result;
+        $this->jsonOutput();
     }
 
     function publish()

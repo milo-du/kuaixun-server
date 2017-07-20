@@ -59,10 +59,11 @@ class PublisherUser extends BaseController
         $limit = $this->input->get('limit');
         $offset = $this->input->get('offset');
         $limit = $limit ? $limit : 0;
-        $offset = $offset ? $offset : 1;
+        $offset = $offset ? $offset : 10;
         $this->load->model('publisher_user_model');
-        $data = $this->publisher_user_model->get_user_list($limit, $offset);
-        $this->result = $data;
+        $data = $this->publisher_user_model->getUserList($limit, $offset);
+        $this->result['data'] = $data['data'];
+        $this->result['total'] = $data['total'];
         $this->jsonOutput();
     }
 

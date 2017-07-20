@@ -20,7 +20,9 @@ class Publisher_user_model extends CI_Model
     {
         $sql = "SELECT * FROM publisher_users limit $limit,$offset";
         $query = $this->db->query($sql, array($limit, $offset));
-        return $query->result_array();
+        $total = $this->db->count_all('publisher_users');
+        $result = $query->result_array();
+        return ['total' => $total, 'data' => $result];
     }
 
     public function login($mobile, $pwd)

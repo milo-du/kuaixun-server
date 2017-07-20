@@ -2,17 +2,24 @@
 
 class Publisher_user_model extends CI_Model
 {
-    public function get_user($uid)
+    public function getUserByUserID($uid)
     {
         $sql = 'SELECT * FROM publisher_users WHERE userID=?';
         $query = $this->db->query($sql, array($uid));
         return $query->result();
     }
 
-    public function get_user_list($limit = 0, $offset = 10)
+    public function getUserByMobile($phone)
+    {
+        $sql = 'SELECT * FROM publisher_users WHERE phone=?';
+        $query = $this->db->query($sql, array($phone));
+        return $query->result();
+    }
+
+    public function getUserList($limit = 0, $offset = 10)
     {
         $sql = "SELECT * FROM publisher_users limit $limit,$offset";
-        $query = $this->db->query($sql, array($offset, $limit));
+        $query = $this->db->query($sql, array($limit, $offset));
         return $query->result_array();
     }
 

@@ -18,6 +18,12 @@ class PublisherUser extends BaseController
             $this->jsonOutput();
             return;
         }
+        if (!$this->isMobile($mobile)) {
+            $result = array('ret' => -1, 'msg' => '手机号格式不正确');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
         if (strlen($pwd) == 0) {
             $result = array('ret' => -1, 'msg' => '密码不能为空');
             $this->result = $result;
@@ -28,7 +34,7 @@ class PublisherUser extends BaseController
         $data = $this->publisher_user_model->login($mobile, $pwd);
         if (count($data) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不存在或者密码错误');
-            $this->result = $result[0];
+            $this->result = $result;
             $this->jsonOutput();
         } else {
             $userInfo = $data[0];
@@ -39,8 +45,9 @@ class PublisherUser extends BaseController
             $token = md5($userID + time());
             $tokenInfo = ['uid' => $userID, 'token' => $token];
             $result = array('ret' => 0, 'data' => $tokenInfo);
-            $_SESSION['token'] = $token;
-            $_SESSION['expire'] = time();
+            $publisherToken = md5($userID + $token);
+            $_SESSION['publisherToken'] = $publisherToken;
+            $_SESSION['publisherExpire'] = time();
             $this->result = $result;
             $this->jsonOutput();
         }
@@ -48,7 +55,7 @@ class PublisherUser extends BaseController
 
     function getUserList()
     {
-        $this->isLogin();
+        $this->isPublisherLogin();
         $limit = $this->input->get('limit');
         $offset = $this->input->get('offset');
         $limit = $limit ? $limit : 0;
@@ -70,6 +77,12 @@ class PublisherUser extends BaseController
             $this->jsonOutput();
             return;
         }
+        if (!$this->isMobile($mobile)) {
+            $result = array('ret' => -1, 'msg' => '手机号格式不正确');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
         if (strlen($pwd) == 0) {
             $result = array('ret' => -1, 'msg' => '密码不能为空');
             $this->result = $result;
@@ -77,15 +90,22 @@ class PublisherUser extends BaseController
             return;
         }
         $this->load->model('publisher_user_model');
-        $data = $this->publisher_user_model->register($mobile, $pwd, $ip);
-        if ($data) {
-            $result = array('ret' => 0, 'msg' => '注册成功',);
+        $existsUserInfo = $this->publisher_user_model->getUserByMobile($mobile);
+        if (count($existsUserInfo) > 0) {
+            $result = array('ret' => -1, 'msg' => '该手机号已经存在');
             $this->result = $result;
             $this->jsonOutput();
         } else {
-            $result = array('ret' => -1, 'msg' => '注册失败，请稍候重试');
-            $this->result = $result;
-            $this->jsonOutput();
+            $data = $this->publisher_user_model->register($mobile, $pwd, $ip);
+            if ($data) {
+                $result = array('ret' => 0, 'msg' => '注册成功');
+                $this->result = $result;
+                $this->jsonOutput();
+            } else {
+                $result = array('ret' => -1, 'msg' => '注册失败，请稍候重试');
+                $this->result = $result;
+                $this->jsonOutput();
+            }
         }
     }
 }

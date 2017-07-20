@@ -56,4 +56,6 @@ $route['translate_uri_dashes'] = FALSE;
 $route['publisher_user/login']='publisheruser/login';
 $route['publisher_user/register']='publisheruser/register';
 $route['publisher_user/get_user_list']='publisheruser/getUserList';
+$route['publisher_job/publish']='publisherjob/publish';
+$route['admin/get_admin_job_config']='/getAdminJobConfig';
 

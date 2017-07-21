@@ -16,10 +16,10 @@ class Publisher_user_model extends CI_Model
         return $query->result();
     }
 
-    public function getUserList($limit = 0, $offset = 10)
+    public function getUserList($offset = 0, $limit = 10)
     {
-        $sql = "SELECT * FROM publisher_users limit $limit,$offset";
-        $query = $this->db->query($sql, array($limit, $offset));
+        $sql = "SELECT * FROM publisher_users limit $offset,$limit";
+        $query = $this->db->query($sql, array($offset, $limit));
         $total = $this->db->count_all('publisher_users');
         $result = $query->result_array();
         return ['total' => $total, 'data' => $result];

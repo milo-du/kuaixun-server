@@ -2,15 +2,14 @@
 
 class Publisher_job_model extends CI_Model
 {
-    public function getJobList($uid, $limit = 0, $offset = 10)
+    public function getJobList($uid, $offset = 0, $limit = 10)
     {
-        //$this->db->from('jobs');
-        //$this->db->where('publisherID', $uid);
-        //$this->db->limit($limit, $offset);
-        $query = $this->db->get('jobs');
-        $result =$query->result_array();
-        $total=$this->db->count_all_results('jobs', FALSE);
-        return ['total' => $total, 'data' => $result];
+        $this->db->where('publisherID', $uid);
+        $total = $this->db->count_all_results('jobs', FALSE);
+        $this->db->limit($limit, $offset);
+        $query = $this->db->get();
+        $data = $query->result_array();
+        return ['total' => $total, 'data' => $data];
     }
 
     public function publish($jobTotalPrice, $uid, $link, $title, $initReadCount, $endReadCount, $price)

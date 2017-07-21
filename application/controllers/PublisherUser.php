@@ -56,12 +56,12 @@ class PublisherUser extends BaseController
     function getUserList()
     {
         $this->isPublisherLogin();
-        $limit = $this->input->get('limit');
         $offset = $this->input->get('offset');
-        $limit = $limit ? $limit : 0;
-        $offset = $offset ? $offset : 10;
+        $limit = $this->input->get('limit');
+        $offset = $offset ? $offset : 0;
+        $limit = $limit ? $limit : 10;
         $this->load->model('publisher_user_model');
-        $data = $this->publisher_user_model->getUserList($limit, $offset);
+        $data = $this->publisher_user_model->getUserList($offset, $limit);
         $this->result['data'] = $data['data'];
         $this->result['total'] = $data['total'];
         $this->jsonOutput();

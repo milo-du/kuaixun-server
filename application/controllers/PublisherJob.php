@@ -12,8 +12,13 @@ class PublisherJob extends BaseController
     {
         $this->isPublisherLogin();
         $this->load->model('Publisher_job_model');
-        $result = $this->Publisher_job_model->getJobList(10000, 0, 10);
-        $this->result = $result;
+        $uid = $this->input->get('uid');
+        $offset = $this->input->get('offset');
+        $limit = $this->input->get('limit');
+        $offset = $offset ? $offset : 0;
+        $limit = $limit ? $limit : 10;
+        $result = $this->Publisher_job_model->getJobList($uid, $offset, $limit);
+        $this->result['data'] = $result;
         $this->jsonOutput();
     }
 

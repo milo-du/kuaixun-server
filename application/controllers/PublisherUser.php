@@ -8,6 +8,21 @@ class PublisherUser extends BaseController
         parent::__construct();
     }
 
+    function getUser()
+    {
+        $this->isPublisherLogin();
+        $uid = $this->input->get('uid');
+        $this->load->model('publisher_user_model');
+        $data = $this->publisher_user_model->getUserByUserID($uid);
+        if (count($data) == 0) {
+            $result = array('ret' => -1, 'msg' => '该用户不存在');
+            $this->result = $result;
+        } else {
+            $this->result['data'] = $data[0];
+        }
+        $this->jsonOutput();
+    }
+
     public function login()
     {
         $mobile = $this->input->post('mobile');

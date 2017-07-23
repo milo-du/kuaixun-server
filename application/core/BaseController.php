@@ -19,6 +19,8 @@ class BaseController extends CI_Controller
 
     public function jsonOutput($isExit = true)
     {
+        $this->output->set_header('Access-Control-Allow-Origin:http://a.m.com');
+        $this->output->set_header('Access-Control-Allow-Credentials:true');
         $this->output->set_content_type('json')->set_output(json_encode($this->result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE))->_display();
         if ($isExit) {
             exit;

@@ -10,6 +10,14 @@ class PublisherFlow extends BaseController
 
     function getList()
     {
-        $this->isPublisherLogin();
+        $this->load->model('Publisher_flow_model');
+        $uid = $this->input->get('uid');
+        $offset = $this->input->get('offset');
+        $limit = $this->input->get('limit');
+        $offset = $offset ? $offset : 0;
+        $limit = $limit ? $limit : 10;
+        $result = $this->Publisher_flow_model->getList($uid, $offset, $limit);
+        $this->result['data'] = $result;
+        $this->jsonOutput();
     }
 }

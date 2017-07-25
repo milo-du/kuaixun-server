@@ -46,6 +46,25 @@ class BaseController extends CI_Controller
         }
     }
 
+    //后台管理员是否已经登录
+    public function isAdminLogin()
+    {
+        $userId = $this->input->get('uid');
+        $token = $this->input->get('token');
+        $adminToken = md5($userId + $token);
+        if (isset($_SESSION['adminToken']) && $_SESSION['adminToken'] == $adminToken) {
+            if ($_SESSION['adminExpire'] + 86400 < time()) {
+                $this->result['ret'] = 2000;
+                $this->result['msg'] = '对不起，你的登录已失效，请先登录';
+                $this->jsonOutput();
+            }
+        } else {
+            $this->result['ret'] = 2001;
+            $this->result['msg'] = '您未登录，请先登录';
+            $this->jsonOutput();
+        }
+    }
+
     /**
      * 验证手机号是否正确
      * @author honfei

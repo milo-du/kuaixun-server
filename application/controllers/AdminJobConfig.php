@@ -7,4 +7,13 @@ class AdminJobConfig extends BaseController
     {
         parent::__construct();
     }
+
+    function getAdminJobConfig()
+    {
+        $this->isAdminLogin();
+        $this->load->model('Admin_job_config_model');
+        $result = $this->Admin_job_config_model->getAdminJobConfig();
+        $this->result['data'] = $result;
+        $this->jsonOutput();
+    }
 }

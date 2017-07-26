@@ -8,7 +8,7 @@ class Publisher_job_model extends CI_Model
         $total = $this->db->count_all_results('jobs', FALSE);
         $limit=(int)$limit;
         $offset=(int)$offset;
-        $sql = 'select *,(select count(*) from brusher_job a where a.jobID=jobs.id) as totalBrushers from jobs where publisherID=? LIMIT ?,?';
+        $sql = 'select *,(select count(1) from brusher_job a where a.jobID=jobs.id) as totalBrushers from jobs where publisherID=? LIMIT ?,?';
         $query = $this->db->query($sql, array($uid, $offset, $limit));
         $data = $query->result_array();
         return ['total' => $total, 'data' => $data];

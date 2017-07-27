@@ -20,7 +20,7 @@ class Brusher_job_model extends CI_Model
         $total = $this->db->count_all_results('brusher_job', FALSE);
         $limit = (int)$limit;
         $offset = (int)$offset;
-        $sql = 'select a.*,b.link,b.title from brusher_job a left join jobs b on a.jobID=b.id where a.brusherUserID==? LIMIT ?,?';
+        $sql = 'select a.*,b.link,b.title from brusher_job a left join jobs b on a.jobID=b.id where a.brusherUserID=? LIMIT ?,?';
         $query = $this->db->query($sql, array($uid, $offset, $limit));
         $data = $query->result_array();
         return ['total' => $total, 'data' => $data];
@@ -31,16 +31,14 @@ class Brusher_job_model extends CI_Model
         $sql = 'SELECT * FROM jobs WHERE id=?';
         $query = $this->db->query($sql, array($jobID));
         $jobData = $query->result_array();
-        if ($jobData->length > 0) {
+        $result = ['ret' => '-1', 'msg' => '领取失败，任务不存在'];
+        if (count($jobData) > 0) {
             $endReadCount = $jobData->endReadCount;
             $price = $jobData->price;
             $insertSql = "INSERT INTO brusher_job(jobID,price,brusherUserID,totalView,view) values(?,?,?,?,?)";
             $this->db->query($insertSql, array($jobID, $price, $uid, $endReadCount, 0));
-            $result = array('ret' => 0, 'msg' => '领取成功');
-            return $result;
-        } else {
-            $result = array('ret' => -1, 'msg' => '任务不存在');
-            return $result;
+            $result = ['ret' => '0', 'msg' => '领取成功'];
         }
+        return $result;
     }
 }

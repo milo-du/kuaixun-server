@@ -61,5 +61,21 @@ $route['publisher_job/publish']='publisherjob/publish';
 $route['publisher_job/get_job_list']='publisherjob/getList';
 $route['publisher_flow/get_list']='publisherflow/getList';
 
-$route['admin/get_admin_job_config']='/getAdminJobConfig';
+$route['admin/get_admin_job_config']='adminjobconfig/getAdminJobConfig';
+$route['admin/set_admin_job_config']='adminjobconfig/setAdminJobConfig';
+$route['admin/get_admin_user_list']='adminuser/getAdminUserList';
+$route['admin/get_publisher_user_list']='adminuser/getPublisherUserList';
+$route['admin/get_brusher_user_list']='adminuser/getBrusherUserList';
+$route['admin/get_publisher_job_list']='adminjob/getPublisherJobList';
+$route['admin/get_brusher_job_list']='adminjob/getBrusherJobList';
+$route['admin/login']='adminuser/login';
+$route['admin/register']='adminuser/register';
+
+$route['brusher_user/login']='brusheruser/login';
+$route['brusher_user/register']='brusheruser/register';
+$route['brusher_user/get_user_list']='brusheruser/getUserList';
+$route['brusher_user/get_user']='brusheruser/getUser';
+$route['brusher_job/get_list']='brusherjob/getList';
+$route['brusher_job/get_recive_list']='brusherjob/getReciveList';
+$route['brusher_job/recive']='brusherjob/recive';
 

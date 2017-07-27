@@ -19,7 +19,14 @@ class BaseController extends CI_Controller
 
     public function jsonOutput($isExit = true)
     {
-        $this->output->set_header('Access-Control-Allow-Origin:http://a.m.com');
+        $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
+
+        $allow_origin = array(
+            'http://a.m.com'
+        );
+        if(in_array($origin, $allow_origin)){
+            $this->output->set_header('Access-Control-Allow-Origin:'.$origin);
+        }
         $this->output->set_header('Access-Control-Allow-Credentials:true');
         $this->output->set_content_type('json')->set_output(json_encode($this->result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE))->_display();
         if ($isExit) {
@@ -65,6 +72,24 @@ class BaseController extends CI_Controller
         }
     }
 
+    //刷手是否已经登录
+    public function isBrusherLogin()
+    {
+        $userId = $this->input->get('uid');
+        $token = $this->input->get('token');
+        $brusherToken = md5($userId + $token);
+        if (isset($_SESSION['brusherToken']) && $_SESSION['brusherToken'] == $brusherToken) {
+            if ($_SESSION['bursherExpire'] + 86400 < time()) {
+                $this->result['ret'] = 2000;
+                $this->result['msg'] = '对不起，你的登录已失效，请先登录';
+                $this->jsonOutput();
+            }
+        } else {
+            $this->result['ret'] = 2001;
+            $this->result['msg'] = '您未登录，请先登录';
+            $this->jsonOutput();
+        }
+    }
     /**
      * 验证手机号是否正确
      * @author honfei

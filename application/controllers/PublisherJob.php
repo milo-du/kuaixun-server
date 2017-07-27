@@ -21,7 +21,6 @@ class PublisherJob extends BaseController
         $this->result['data'] = $result;
         $this->jsonOutput();
     }
-
     function publish()
     {
         $this->isPublisherLogin();

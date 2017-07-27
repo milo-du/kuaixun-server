@@ -16,18 +16,35 @@ class Admin_user_model extends CI_Model
         return $query->result();
     }
 
-    public function getUserList($offset = 0, $limit = 10)
+    public function getAdminUserList($offset = 0, $limit = 10)
     {
         $sql = "SELECT * FROM admin_users limit $offset,$limit";
+        $query = $this->db->query($sql, array($offset, $limit));
+        $total = $this->db->count_all('admin_users');
+        $result = $query->result_array();
+        return ['total' => $total, 'data' => $result];
+    }
+
+    public function getPublisherUserList($offset = 0, $limit = 10)
+    {
+        $sql = "SELECT * FROM publisher_users limit $offset,$limit";
         $query = $this->db->query($sql, array($offset, $limit));
         $total = $this->db->count_all('publisher_users');
         $result = $query->result_array();
         return ['total' => $total, 'data' => $result];
     }
 
+    public function getBrusherUserList($offset = 0, $limit = 10)
+    {
+        $sql = "SELECT * FROM brusher_users limit $offset,$limit";
+        $query = $this->db->query($sql, array($offset, $limit));
+        $total = $this->db->count_all('brusher_users');
+        $result = $query->result_array();
+        return ['total' => $total, 'data' => $result];
+    }
     public function login($mobile, $pwd)
     {
-        $sql = 'SELECT * FROM publisher_users WHERE phone=? and password=?';
+        $sql = 'SELECT * FROM admin_users WHERE phone=? and password=?';
         $query = $this->db->query($sql, array($mobile, $pwd));
         return $query->result();
     }

@@ -1,19 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AdminUser extends BaseController
+class BrusherUser extends BaseController
 {
     function __construct()
     {
         parent::__construct();
     }
 
-    function getAdminUser()
+    function getUser()
     {
-        $this->isAdminLogin();
+        $this->isBrusherLogin();
         $uid = $this->input->get('uid');
-        $this->load->model('admin_user_model');
-        $data = $this->admin_user_model->getUserByUserID($uid);
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->getUserByUserID($uid);
         if (count($data) == 0) {
             $result = array('ret' => -1, 'msg' => '该用户不存在');
             $this->result = $result;
@@ -45,8 +45,8 @@ class AdminUser extends BaseController
             $this->jsonOutput();
             return;
         }
-        $this->load->model('admin_user_model');
-        $data = $this->admin_user_model->login($mobile, $pwd);
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->login($mobile, $pwd);
         if (count($data) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不存在或者密码错误');
             $this->result = $result;
@@ -56,55 +56,27 @@ class AdminUser extends BaseController
             $userID = $userInfo->userID;
             $ip = $this->input->ip_address();
             //更新登录时间和IP
-            $this->admin_user_model->updateLoginTime($ip, $userID);
+            $this->brusher_user_model->updateLoginTime($ip, $userID);
             $token = md5($userID + time());
             $tokenInfo = ['uid' => $userID, 'token' => $token];
             $result = array('ret' => 0, 'data' => $tokenInfo);
             $publisherToken = md5($userID + $token);
-            $_SESSION['adminToken'] = $publisherToken;
-            $_SESSION['adminExpire'] = time();
+            $_SESSION['brusherToken'] = $publisherToken;
+            $_SESSION['bursherExpire'] = time();
             $this->result = $result;
             $this->jsonOutput();
         }
     }
 
-    function getAdminUserList()
+    function getUserList()
     {
-        $this->isAdminLogin();
+        $this->isBrusherLogin();
         $offset = $this->input->get('offset');
         $limit = $this->input->get('limit');
         $offset = $offset ? $offset : 0;
         $limit = $limit ? $limit : 10;
-        $this->load->model('admin_user_model');
-        $data = $this->admin_user_model->getAdminUserList($offset, $limit);
-        $this->result['data'] = $data['data'];
-        $this->result['total'] = $data['total'];
-        $this->jsonOutput();
-    }
-
-    function getPublisherUserList()
-    {
-        $this->isAdminLogin();
-        $offset = $this->input->get('offset');
-        $limit = $this->input->get('limit');
-        $offset = $offset ? $offset : 0;
-        $limit = $limit ? $limit : 10;
-        $this->load->model('admin_user_model');
-        $data = $this->admin_user_model->getPublisherUserList($offset, $limit);
-        $this->result['data'] = $data['data'];
-        $this->result['total'] = $data['total'];
-        $this->jsonOutput();
-    }
-
-    function getBrusherUserList()
-    {
-        $this->isAdminLogin();
-        $offset = $this->input->get('offset');
-        $limit = $this->input->get('limit');
-        $offset = $offset ? $offset : 0;
-        $limit = $limit ? $limit : 10;
-        $this->load->model('admin_user_model');
-        $data = $this->admin_user_model->getPublisherUserList($offset, $limit);
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->getUserList($offset, $limit);
         $this->result['data'] = $data['data'];
         $this->result['total'] = $data['total'];
         $this->jsonOutput();
@@ -114,7 +86,6 @@ class AdminUser extends BaseController
     {
         $mobile = $this->input->post('mobile');
         $pwd = $this->input->post('pwd');
-        $code = $this->input->post('code');
         $ip = $this->input->ip_address();
         if (strlen($mobile) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不能为空');
@@ -134,26 +105,14 @@ class AdminUser extends BaseController
             $this->jsonOutput();
             return;
         }
-        if (strlen($code) == 0) {
-            $result = array('ret' => -1, 'msg' => '邀请码不能为空');
-            $this->result = $result;
-            $this->jsonOutput();
-            return;
-        }
-        if ($code != 'sb') {
-            $result = array('ret' => -1, 'msg' => '邀请码不正确');
-            $this->result = $result;
-            $this->jsonOutput();
-            return;
-        }
-        $this->load->model('admin_user_model');
-        $existsUserInfo = $this->admin_user_model->getUserByMobile($mobile);
+        $this->load->model('brusher_user_model');
+        $existsUserInfo = $this->brusher_user_model->getUserByMobile($mobile);
         if (count($existsUserInfo) > 0) {
             $result = array('ret' => -1, 'msg' => '该手机号已经存在');
             $this->result = $result;
             $this->jsonOutput();
         } else {
-            $data = $this->admin_user_model->register($mobile, $pwd, $ip);
+            $data = $this->brusher_user_model->register($mobile, $pwd, $ip);
             if ($data) {
                 $result = array('ret' => 0, 'msg' => '注册成功');
                 $this->result = $result;

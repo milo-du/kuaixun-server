@@ -124,4 +124,44 @@ class BrusherUser extends BaseController
             }
         }
     }
+
+    public function setPayAcount()
+    {
+        $this->isBrusherLogin();
+        $uid = $this->input->get('uid');
+        $phone = $this->input->post('alipayPhone');
+        $name = $this->input->post('alipayName');
+        if (strlen($phone) == 0) {
+            $result = array('ret' => -1, 'msg' => '手机号不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (!$this->isMobile($phone)) {
+            $result = array('ret' => -1, 'msg' => '手机号格式不正确');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (strlen($name) == 0) {
+            $result = array('ret' => -1, 'msg' => '姓名不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->setPayAcount($uid, $phone, $name);
+        $this->result['data'] = $data['data'];
+        $this->jsonOutput();
+    }
+
+    public function getPayAcount()
+    {
+        $this->isBrusherLogin();
+        $uid = $this->input->get('uid');
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->getPayAcount($uid);
+        $this->result['data'] = $data;
+        $this->jsonOutput();
+    }
 }

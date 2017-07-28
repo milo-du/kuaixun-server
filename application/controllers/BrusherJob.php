@@ -14,9 +14,10 @@ class BrusherJob extends BaseController
         $this->load->model('brusher_job_model');
         $offset = $this->input->get('offset');
         $limit = $this->input->get('limit');
+        $uid = $this->input->get('uid');
         $offset = $offset ? $offset : 0;
         $limit = $limit ? $limit : 10;
-        $result = $this->brusher_job_model->getJobList($offset, $limit);
+        $result = $this->brusher_job_model->getJobList($uid, $offset, $limit);
         $this->result['data'] = $result;
         $this->jsonOutput();
     }

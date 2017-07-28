@@ -43,4 +43,19 @@ class Brusher_user_model extends CI_Model
         $sql = "UPDATE brusher_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
         return $this->db->query($sql, array(time(), $ip, $uid));
     }
+
+    //设置刷手提现帐号(仅仅支持支付宝)
+    public function setPayAcount($uid, $phone, $name)
+    {
+        $sql = "UPDATE brusher_users SET alipayPhone=?,alipayName=? where userID=?";
+        return $this->db->query($sql, array($phone, $name, $uid));
+    }
+
+    //获取刷手提现帐号
+    public function getPayAcount($uid)
+    {
+        $sql = 'SELECT alipayPhone,alipayName FROM brusher_users WHERE userID=?';
+        $query = $this->db->query($sql, array($uid));
+        return $query->result();
+    }
 }

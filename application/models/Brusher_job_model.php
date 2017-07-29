@@ -2,14 +2,14 @@
 
 class Brusher_job_model extends CI_Model
 {
-    public function getJobList($brusheruid,$offset = 0, $limit = 10)
+    public function getJobList($brusheruid, $offset = 0, $limit = 10)
     {
         $this->db->where('done', 0);
         $total = $this->db->count_all_results('jobs', FALSE);
         $limit = (int)$limit;
         $offset = (int)$offset;
-        $sql = 'SELECT a.*,(SELECT COUNT(1) FROM brusher_job where brusherUserID=? and JobID=a.ID) as reciveStatu  FROM jobs a WHERE Done=0 LIMIT ?,?';
-        $query = $this->db->query($sql, array($brusheruid,$offset, $limit));
+        $sql = 'SELECT a.*,(SELECT COUNT(1) FROM brusher_job where brusherUserID=? and JobID=a.ID) as reciveState  FROM jobs a WHERE Done=0 order by a.id desc LIMIT ?,?';
+        $query = $this->db->query($sql, array($brusheruid, $offset, $limit));
         $data = $query->result_array();
         return ['total' => $total, 'data' => $data];
     }
@@ -20,7 +20,7 @@ class Brusher_job_model extends CI_Model
         $total = $this->db->count_all_results('brusher_job', FALSE);
         $limit = (int)$limit;
         $offset = (int)$offset;
-        $sql = 'select a.*,b.link,b.title from brusher_job a left join jobs b on a.jobID=b.id where a.brusherUserID=? LIMIT ?,?';
+        $sql = 'select a.*,b.link,b.title,b.done,b.doneTime from brusher_job a left join jobs b on a.jobID=b.id where a.brusherUserID=? order by a.id desc LIMIT ?,?';
         $query = $this->db->query($sql, array($uid, $offset, $limit));
         $data = $query->result_array();
         return ['total' => $total, 'data' => $data];
@@ -46,5 +46,12 @@ class Brusher_job_model extends CI_Model
             $result = ['ret' => '0', 'msg' => '领取成功'];
         }
         return $result;
+    }
+
+    //提现申请
+    public function applyMoney($id)
+    {
+        $sql = "UPDATE brusher_job SET state=1 where id=?";
+        return $this->db->query($sql, array($id));
     }
 }

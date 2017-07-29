@@ -42,6 +42,7 @@ class Admin_user_model extends CI_Model
         $result = $query->result_array();
         return ['total' => $total, 'data' => $result];
     }
+
     public function login($mobile, $pwd)
     {
         $sql = 'SELECT * FROM admin_users WHERE phone=? and password=?';
@@ -58,6 +59,6 @@ class Admin_user_model extends CI_Model
     public function updateLoginTime($ip, $uid)
     {
         $sql = "UPDATE admin_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
-        return $this->db->query($sql, array(time(), $ip, $uid));
+        return $this->db->query($sql, array(date('Y-m-d H:i:s', time()), $ip, $uid));
     }
 }

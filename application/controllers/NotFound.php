@@ -22,7 +22,7 @@ class NotFound extends BaseController
      */
     public function index()
     {
-        $arr = array('ret' => 0, 'msg' => 'action is not exists');
-        $this->output->set_content_type('application/json')->set_output(json_encode($arr));
+        $this->result = array('ret' => 0, 'msg' => 'action is not exists');
+        $this->jsonOutput();
     }
 }

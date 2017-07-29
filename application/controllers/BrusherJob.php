@@ -45,4 +45,14 @@ class BrusherJob extends BaseController
         $this->result = $this->brusher_job_model->recive($jobID, $uid);
         $this->jsonOutput();
     }
+
+    function applyMoney()
+    {
+        $this->isBrusherLogin();
+        $id = $this->input->post('id');
+        $this->load->model('brusher_job_model');
+        $data = $this->brusher_job_model->applyMoney($id);
+        $this->result['data'] = $data['data'];
+        $this->jsonOutput();
+    }
 }

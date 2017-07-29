@@ -62,6 +62,7 @@ $route['publisher_job/get_job_list'] = 'publisherjob/getList';
 $route['publisher_flow/get_list'] = 'publisherflow/getList';
 
 $route['admin/get_admin_job_config'] = 'adminjobconfig/getAdminJobConfig';
+$route['admin/get_user'] = 'adminuser/getAdminUser';
 $route['admin/set_admin_job_config'] = 'adminjobconfig/setAdminJobConfig';
 $route['admin/get_admin_user_list'] = 'adminuser/getAdminUserList';
 $route['admin/get_publisher_user_list'] = 'adminuser/getPublisherUserList';
@@ -80,3 +81,4 @@ $route['brusher_user/get_user'] = 'brusheruser/getUser';
 $route['brusher_job/get_list'] = 'brusherjob/getList';
 $route['brusher_job/get_recive_list'] = 'brusherjob/getReciveList';
 $route['brusher_job/recive'] = 'brusherjob/recive';
+$route['brusher_job/applyMoney'] = 'brusherjob/applyMoney';

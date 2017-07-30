@@ -59,6 +59,8 @@ class BrusherUser extends BaseController
             $this->brusher_user_model->updateLoginTime($ip, $userID);
             $token = md5($userID + time());
             $tokenInfo = ['uid' => $userID, 'token' => $token];
+            var_dump($tokenInfo);
+            return;
             $result = array('ret' => 0, 'data' => $tokenInfo);
             $publisherToken = md5($userID + $token);
             $_SESSION['brusherToken'] = $publisherToken;

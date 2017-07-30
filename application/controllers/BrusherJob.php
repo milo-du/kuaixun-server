@@ -51,8 +51,7 @@ class BrusherJob extends BaseController
         $this->isBrusherLogin();
         $id = $this->input->post('id');
         $this->load->model('brusher_job_model');
-        $data = $this->brusher_job_model->applyMoney($id);
-        $this->result['data'] = $data['data'];
+        $this->brusher_job_model->applyMoney($id);
         $this->jsonOutput();
     }
 }

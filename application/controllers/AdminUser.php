@@ -104,7 +104,7 @@ class AdminUser extends BaseController
         $offset = $offset ? $offset : 0;
         $limit = $limit ? $limit : 10;
         $this->load->model('admin_user_model');
-        $data = $this->admin_user_model->getPublisherUserList($offset, $limit);
+        $data = $this->admin_user_model->getBrusherUserList($offset, $limit);
         $this->result['data'] = $data['data'];
         $this->result['total'] = $data['total'];
         $this->jsonOutput();

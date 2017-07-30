@@ -31,4 +31,24 @@ class AdminJob extends BaseController
         $this->result['data'] = $result;
         $this->jsonOutput();
     }
+
+    function getBrusherApplyJobList(){
+        $this->isAdminLogin();
+        $this->load->model('admin_job_model');
+        $offset = $this->input->get('offset');
+        $limit = $this->input->get('limit');
+        $offset = $offset ? $offset : 0;
+        $limit = $limit ? $limit : 10;
+        $result = $this->admin_job_model->getBrusherApplyJobList($offset, $limit);
+        $this->result['data'] = $result;
+        $this->jsonOutput();
+    }
+    //确认打款
+    function sureApply(){
+        $this->isAdminLogin();
+        $this->load->model('admin_job_model');
+        $uid=$limit = $this->input->post('id');
+        $result = $this->admin_job_model->sureApply($uid);
+        $this->jsonOutput();
+    }
 }

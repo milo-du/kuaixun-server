@@ -22,7 +22,12 @@ class BaseController extends CI_Controller
         $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
 
         $allow_origin = array(
-            'http://a.m.com'
+            'http://a.m.com',
+            'http://b.m.com',
+            'http://c.m.com',
+            'http://s.runningdreamer.com',
+            'http://p.runningdreamer.com',
+            'http://a.runningdreamer.com',
         );
         if(in_array($origin, $allow_origin)){
             $this->output->set_header('Access-Control-Allow-Origin:'.$origin);
@@ -111,5 +116,14 @@ class BaseController extends CI_Controller
     function isInt($str)
     {
         return preg_match("/^\d*$/", $str);
+    }
+    /**
+     * 验证是否是金额
+     * @author honfei
+     * @param number $mobile
+     */
+    function isMoney($str)
+    {
+        return preg_match("/^([1-9]\d{0,9}|0)([.]?|(\.\d{1,2})?)$/", $str);
     }
 }

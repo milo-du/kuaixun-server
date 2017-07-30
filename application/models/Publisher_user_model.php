@@ -41,6 +41,6 @@ class Publisher_user_model extends CI_Model
     public function updateLoginTime($ip, $uid)
     {
         $sql = "UPDATE publisher_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
-        return $this->db->query($sql, array(time(), $ip, $uid));
+        return $this->db->query($sql, array(date('Y-m-d H:i:s', time()), $ip, $uid));
     }
 }

@@ -16,7 +16,18 @@ class AdminJobConfig extends BaseController
         $this->result['data'] = $result;
         $this->jsonOutput();
     }
-
+    public function getAdminJobList()
+    {
+        $this->isAdminLogin();
+        $offset = $this->input->get('offset');
+        $limit = $this->input->get('limit');
+        $offset = $offset ? $offset : 0;
+        $limit = $limit ? $limit : 10;
+        $this->load->model('Admin_job_config_model');
+        $result = $this->Admin_job_config_model->getAdminJobList($offset, $limit);
+        $this->result['data'] = $result;
+        $this->jsonOutput();
+    }
     function setAdminJobConfig()
     {
         $this->isAdminLogin();

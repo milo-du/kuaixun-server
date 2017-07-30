@@ -22,7 +22,6 @@ class home extends BaseController
      */
     public function index()
     {
-        phpinfo();
         $this->jsonOutput();
     }
 }

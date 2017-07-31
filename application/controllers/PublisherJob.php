@@ -21,6 +21,7 @@ class PublisherJob extends BaseController
         $this->result['data'] = $result;
         $this->jsonOutput();
     }
+
     function publish()
     {
         $this->isPublisherLogin();
@@ -33,7 +34,7 @@ class PublisherJob extends BaseController
         $publisherPrice = $configData[0]->publisherPrice;
         $link = $this->input->post('link');
         $title = $this->input->post('title');
-        $initReadCount = $this->input->post('initReadCount');
+        $initReadCount = 0;//$this->input->post('initReadCount');
         $endReadCount = $this->input->post('endReadCount');
         if (strlen($link) == 0) {
             $result = array('ret' => -1, 'msg' => '链接不能为空');
@@ -47,18 +48,18 @@ class PublisherJob extends BaseController
             $this->jsonOutput();
             return;
         }
-        if (strlen($initReadCount) == 0) {
-            $result = array('ret' => -1, 'msg' => '初始阅读量不能为空');
-            $this->result = $result;
-            $this->jsonOutput();
-            return;
-        }
-        if (!$this->isInt($initReadCount)) {
-            $result = array('ret' => -1, 'msg' => '初始阅读量只能为整数');
-            $this->result = $result;
-            $this->jsonOutput();
-            return;
-        }
+//        if (strlen($initReadCount) == 0) {
+//            $result = array('ret' => -1, 'msg' => '初始阅读量不能为空');
+//            $this->result = $result;
+//            $this->jsonOutput();
+//            return;
+//        }
+//        if (!$this->isInt($initReadCount)) {
+//            $result = array('ret' => -1, 'msg' => '初始阅读量只能为整数');
+//            $this->result = $result;
+//            $this->jsonOutput();
+//            return;
+//        }
         if (strlen($endReadCount) == 0) {
             $result = array('ret' => -1, 'msg' => '任务阅读量不能为空');
             $this->result = $result;

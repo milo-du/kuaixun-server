@@ -18,6 +18,9 @@ class PublisherUser extends BaseController
             $result = array('ret' => -1, 'msg' => '该用户不存在');
             $this->result = $result;
         } else {
+            $this->load->model('Admin_job_config_model');
+            $result = $this->Admin_job_config_model->getAdminJobConfig();
+            $data[0]->price = $result[0]->publisherPrice;
             $this->result['data'] = $data[0];
         }
         $this->jsonOutput();

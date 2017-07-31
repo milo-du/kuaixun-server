@@ -68,7 +68,7 @@ class AdminUser extends BaseController
         }
     }
 
-    function getAdminUserList()
+    public function getAdminUserList()
     {
         $this->isAdminLogin();
         $offset = $this->input->get('offset');
@@ -82,7 +82,7 @@ class AdminUser extends BaseController
         $this->jsonOutput();
     }
 
-    function getPublisherUserList()
+    public function getPublisherUserList()
     {
         $this->isAdminLogin();
         $offset = $this->input->get('offset');
@@ -96,7 +96,37 @@ class AdminUser extends BaseController
         $this->jsonOutput();
     }
 
-    function getBrusherUserList()
+    public function rechargePublisher()
+    {
+        $this->isAdminLogin();
+        $uid = $this->input->post('uid');
+        $money = $this->input->post('money');
+        if (strlen($uid) == 0) {
+            $result = array('ret' => -1, 'msg' => '用户ID不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (strlen($money) == 0) {
+            $result = array('ret' => -1, 'msg' => '充值金额不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (!$this->isMoney($money)) {
+            $result = array('ret' => -1, 'msg' => '充值金额格式不正确');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        $this->load->model('admin_user_model');
+        $data = $this->admin_user_model->rechargePublisher($money, $uid);
+        $this->load->model('Publisher_flow_model');
+        $this->Publisher_flow_model->save(0, 0, $uid, $money, '管理员后台充值');
+        $this->jsonOutput();
+    }
+
+    public function getBrusherUserList()
     {
         $this->isAdminLogin();
         $offset = $this->input->get('offset');

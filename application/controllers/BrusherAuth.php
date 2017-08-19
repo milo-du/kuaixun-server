@@ -8,9 +8,10 @@ class BrusherAuth extends BaseController
         parent::__construct();
     }
 
-    function index(){
+    function index()
+    {
         $code = $this->input->get('code');
-        $state=$this->input->get('state'); //刷手用户ID
+        $state = $this->input->get('state'); //刷手用户ID
         $this->load->model('brusher_user_model');
         $userData = $this->brusher_user_model->getUserByUserID($state);
         if (count($userData) == 0) {
@@ -23,16 +24,18 @@ class BrusherAuth extends BaseController
         $data = json_decode(file_get_contents($url));
         $openID = $data->openid;
         $this->load->model('brusher_user_model');
-        $jobData= $this->brusher_user_model->execJob($state,$openID);
+        $jobData = $this->brusher_user_model->execJob($state, $openID);
         if (count($jobData) == 0) {
             $result = '您已经完成所有任务！';
             $this->result = $result;
         } else {
             $jobInfo = $jobData[0];
-            $jobID=$jobInfo->ID;
-            $this->brusher_user_model->saveJobDetail($jobID,$state,$openID);
+            $jobID = $jobInfo->ID;
+            $redirectUrl = $jobInfo->link;
+            $this->brusher_user_model->saveJobDetail($jobID, $state, $openID);
             $this->brusher_user_model->updateJobStatus($jobID);
-            $this->result['data'] = $jobData[0];
+            $this->load->helper('url');
+            redirect($redirectUrl, 'location', 301);
         }
         $this->jsonOutput();
     }
@@ -194,7 +197,8 @@ class BrusherAuth extends BaseController
         $this->jsonOutput();
     }
 
-    public function applyMoney(){
+    public function applyMoney()
+    {
         $this->isBrusherLogin();
         $money = $this->input->post('money');
         if (strlen($money) == 0) {
@@ -218,26 +222,23 @@ class BrusherAuth extends BaseController
             $this->jsonOutput();
             return;
         } else {
-             $amount = $data[0]->amount;
-             if($money>$amount)
-             {
-                 $result = array('ret' => -1, 'msg' => '提现金额不能超过您的账户余额');
-                 $this->result = $result;
-                 $this->jsonOutput();
-                 return;
-             }
-             else{
-                 $existsRecord = $this->brusher_user_model->getExistsApplyMoneyList($uid);
-                 if($existsRecord>0)
-                 {
-                     $result = array('ret' => -1, 'msg' => '您已提交过提现申请了，无法继续提交');
-                     $this->result = $result;
-                     $this->jsonOutput();
-                 }else{
-                     $data = $this->brusher_user_model->applyMoney($uid, $money);
-                     $this->jsonOutput();
-                 }
-             }
+            $amount = $data[0]->amount;
+            if ($money > $amount) {
+                $result = array('ret' => -1, 'msg' => '提现金额不能超过您的账户余额');
+                $this->result = $result;
+                $this->jsonOutput();
+                return;
+            } else {
+                $existsRecord = $this->brusher_user_model->getExistsApplyMoneyList($uid);
+                if ($existsRecord > 0) {
+                    $result = array('ret' => -1, 'msg' => '您已提交过提现申请了，无法继续提交');
+                    $this->result = $result;
+                    $this->jsonOutput();
+                } else {
+                    $data = $this->brusher_user_model->applyMoney($uid, $money);
+                    $this->jsonOutput();
+                }
+            }
         }
     }
 
@@ -246,11 +247,11 @@ class BrusherAuth extends BaseController
         $this->isBrusherLogin();
         $offset = $this->input->get('offset');
         $limit = $this->input->get('limit');
-        $uid= $this->input->get('uid');
+        $uid = $this->input->get('uid');
         $offset = $offset ? $offset : 0;
         $limit = $limit ? $limit : 10;
         $this->load->model('brusher_user_model');
-        $data = $this->brusher_user_model->getApplyMoneyList($uid,$offset, $limit);
+        $data = $this->brusher_user_model->getApplyMoneyList($uid, $offset, $limit);
         $this->result['data'] = $data['data'];
         $this->result['total'] = $data['total'];
         $this->jsonOutput();

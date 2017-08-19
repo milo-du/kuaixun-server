@@ -14,7 +14,9 @@ class BrusherAuth extends BaseController
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxcc878ae8bfac523f&secret=6b822ac34db6217c2ced085ffed5fcea&code={$code}&grant_type=authorization_code";
         $data = json_decode(file_get_contents($url));
         $openID = $data->openid;
-        $this->result['data'] = $openID;
+        $this->load->model('brusher_user_model');
+        $jobData= $this->brusher_user_model->execJob($state,$openID);
+        $this->result['data'] = $jobData;
         $this->jsonOutput();
     }
 

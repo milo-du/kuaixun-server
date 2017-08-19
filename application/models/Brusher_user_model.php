@@ -99,4 +99,36 @@ class Brusher_user_model extends CI_Model
         $total = $this->db->count_all_results('brusher_apply_money', FALSE);
         return $total;
     }
+
+    //执行任务
+    public function execJob($uid,$openID)
+    {
+        $sql = 'select b.* from (select JobID from brusher_job where brusherUserID=? and JobID not in (SELECT jobID from brusher_job_detail where brusherUserID=? and openID=?) order by createTime desc) a left join jobs b on a.JobID=b.id where b.done=0 and (select sum(view) from brusher_job where jobID=a.jobID) < b.endReadCount limit 0,1';
+        $query = $this->db->query($sql, array($uid,$uid,$openID));
+        return $query->result();
+    }
+    //判断此任务是否已经完成，完成更新此任务状态
+    public function updateJobStatus($jobID)
+    {
+        $sql = 'update jobs a inner join brusher_job b on a.id=b.jobID set a.done = 1 where a.endReadCount <= (select sum(view) from brusher_job where jobID =a.id)';
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+    //插入已执行的任务，更新已完成任务条数
+    public function saveJobDetail($jobID,$uid,$openID)
+    {
+        $this->db->trans_start();
+        $sqlBrusherJobDetail = 'INSERT INTO brusher_job_detail (jobID,bursherUserID,openID) VALUES(?,?,?)';
+        $this->db->query($sqlBrusherJobDetail, array($jobID, $uid,$openID));
+        $sqlUpdateReadCount = "update brusher_job set view = view +1 where jobID=? and brusherUserID=?";
+        $this->db->query($sqlUpdateReadCount, array($jobID, $uid));
+        $this->db->trans_complete();
+        $result = ['res' => -1];;
+        if ($this->db->trans_status()) {
+            $result = ['res' => 0];
+        } else {
+            $result = ['res' => -1, 'msg' => '操作失败，请稍后重试'];
+        }
+        return $result;
+    }
 }

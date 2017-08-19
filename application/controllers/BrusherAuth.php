@@ -11,12 +11,29 @@ class BrusherAuth extends BaseController
     function index(){
         $code = $this->input->get('code');
         $state=$this->input->get('state'); //刷手用户ID
+        $this->load->model('brusher_user_model');
+        $userData = $this->brusher_user_model->getUserByUserID($state);
+        if (count($userData) == 0) {
+            $result = array('ret' => -1, 'msg' => '参数不合法');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxcc878ae8bfac523f&secret=6b822ac34db6217c2ced085ffed5fcea&code={$code}&grant_type=authorization_code";
         $data = json_decode(file_get_contents($url));
         $openID = $data->openid;
         $this->load->model('brusher_user_model');
         $jobData= $this->brusher_user_model->execJob($state,$openID);
-        $this->result['data'] = $jobData;
+        if (count($jobData) == 0) {
+            $result = array('您已经完成所有任务！');
+            $this->result = $result;
+        } else {
+            $jobInfo = $jobData[0];
+            $jobID=$jobInfo->ID;
+            $this->brusher_user_model->saveJobDetail($jobID,$state,$openID);
+            $this->brusher_user_model->updateJobStatus($jobID);
+            $this->result['data'] = $data[0];
+        }
         $this->jsonOutput();
     }
 

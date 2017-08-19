@@ -11,7 +11,7 @@ class BrusherAuth extends BaseController
     function index(){
         $code = $this->input->get('code');
         $state=$this->input->get('state'); //刷手用户ID
-        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxcc878ae8bfac523f&secret=6b822ac34db6217c2ced085ffed5fcea&code={$code}&grant_type=authorization_code';
+        $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxcc878ae8bfac523f&secret=6b822ac34db6217c2ced085ffed5fcea&code={$code}&grant_type=authorization_code";
         $this->result['msg'] = $url;
         $this->result['data'] = file_get_contents($url);
         $this->result['code'] = $code;

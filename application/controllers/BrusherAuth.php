@@ -32,7 +32,7 @@ class BrusherAuth extends BaseController
             $jobID=$jobInfo->ID;
             $this->brusher_user_model->saveJobDetail($jobID,$state,$openID);
             $this->brusher_user_model->updateJobStatus($jobID);
-            $this->result['data'] = $data[0];
+            $this->result['data'] = $jobData[0];
         }
         $this->jsonOutput();
     }

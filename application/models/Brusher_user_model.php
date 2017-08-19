@@ -111,8 +111,7 @@ class Brusher_user_model extends CI_Model
     public function updateJobStatus($jobID)
     {
         $sql = 'update jobs a inner join brusher_job b on a.id=b.jobID set a.done = 1 where a.endReadCount <= (select sum(view) from brusher_job where jobID =a.id)';
-        $query = $this->db->query($sql);
-        return $query->result();
+        return $this->db->query($sql, array($jobID));
     }
     //插入已执行的任务，更新已完成任务条数
     public function saveJobDetail($jobID,$uid,$openID)

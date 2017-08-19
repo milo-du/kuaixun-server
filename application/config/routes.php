@@ -87,3 +87,4 @@ $route['brusher_job/recive'] = 'BrusherJob/recive';
 $route['brusher_job/apply_money'] = 'BrusherJob/applyMoney';
 $route['brusher_user/apply_money'] = 'BrusherUser/applyMoney';
 $route['brusher_user/get_apply_money_list'] = 'BrusherUser/getApplyMoneyList';
+$route['brusher_auth'] = 'BrusherAuth/index';

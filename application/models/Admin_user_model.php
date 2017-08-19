@@ -61,4 +61,8 @@ class Admin_user_model extends CI_Model
         $sql = "UPDATE admin_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
         return $this->db->query($sql, array(date('Y-m-d H:i:s', time()), $ip, $uid));
     }
+    public function rechargePublisher($publisherUid,$money){
+        $sql = "UPDATE admin_users SET lastLoginTime=?,lastLoginIP=? where userID=?";
+        return $this->db->query($sql, array(date('Y-m-d H:i:s', time()), $ip, $uid));
+    }
 }

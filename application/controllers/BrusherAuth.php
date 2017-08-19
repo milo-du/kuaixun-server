@@ -24,7 +24,6 @@ class BrusherAuth extends BaseController
         $openID = $data->openid;
         $this->load->model('brusher_user_model');
         $jobData= $this->brusher_user_model->execJob($state,$openID);
-        var_dump($jobData);
         if (count($jobData) == 0) {
             $result = '您已经完成所有任务！';
             $this->result = $result;

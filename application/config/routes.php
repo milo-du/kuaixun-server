@@ -68,6 +68,7 @@ $route['admin/set_admin_job_config'] = 'AdminJobConfig/setAdminJobConfig';
 $route['admin/get_admin_user_list'] = 'AdminUser/getAdminUserList';
 $route['admin/get_publisher_user_list'] = 'AdminUser/getPublisherUserList';
 $route['admin/get_publisher_job_list'] = 'AdminJob/getPublisherJobList';
+$route['admin/recharge_publisher'] = 'AdminUser/rechargePublisher';
 $route['admin/get_brusher_user_list'] = 'AdminUser/getBrusherUserList';
 $route['admin/get_brusher_apply_job_list'] = 'AdminJob/getBrusherApplyJobList';
 $route['admin/get_brusher_job_list'] = 'AdminJob/getBrusherJobList';

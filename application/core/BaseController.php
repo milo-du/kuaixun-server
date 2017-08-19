@@ -57,7 +57,6 @@ class BaseController extends CI_Controller
             $this->jsonOutput();
         }
     }
-
     //后台管理员是否已经登录
     public function isAdminLogin()
     {

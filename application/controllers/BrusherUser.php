@@ -31,7 +31,7 @@ class BrusherUser extends BaseController
         if (count($data) == 0) {
             $this->result['data'] = [];
         } else {
-            $this->result['data'] = $data[0];
+            $this->result['data'] = $data;
         }
         $this->jsonOutput();
     }

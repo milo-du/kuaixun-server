@@ -29,8 +29,7 @@ class BrusherUser extends BaseController
         $this->load->model('brusher_user_model');
         $data = $this->brusher_user_model->getReadOnlyInfo($uid);
         if (count($data) == 0) {
-            $result = array('ret' => -1, 'msg' => '该用户不存在');
-            $this->result = $result;
+            $this->result['data'] = [];
         } else {
             $this->result['data'] = $data[0];
         }

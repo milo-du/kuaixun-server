@@ -52,7 +52,7 @@ class AdminPublisher extends BaseController
             $this->jsonOutput();
             return;
         }
-        $result = $this->admin_publisher_model->setReadOnly($brusherUserID,$money,$provider,$count);
+        $result = $this->admin_readonly_model->setReadOnly($brusherUserID,$money,$provider,$count);
         $this->jsonOutput();
     }
 }

@@ -23,6 +23,20 @@ class BrusherUser extends BaseController
         $this->jsonOutput();
     }
 
+    function getInfo(){
+        $this->isBrusherLogin();
+        $uid = $this->input->get('uid');
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->getReadOnlyInfo($uid);
+        if (count($data) == 0) {
+            $result = array('ret' => -1, 'msg' => '该用户不存在');
+            $this->result = $result;
+        } else {
+            $this->result['data'] = $data[0];
+        }
+        $this->jsonOutput();
+    }
+
     public function login()
     {
         $mobile = $this->input->post('mobile');
@@ -49,6 +63,45 @@ class BrusherUser extends BaseController
         $data = $this->brusher_user_model->login($mobile, $pwd);
         if (count($data) == 0) {
             $result = array('ret' => -1, 'msg' => '手机号不存在或者密码错误');
+            $this->result = $result;
+            $this->jsonOutput();
+        } else {
+            $userInfo = $data[0];
+            $userID = $userInfo->userID;
+            $ip = $this->input->ip_address();
+            //更新登录时间和IP
+            $this->brusher_user_model->updateLoginTime($ip, $userID);
+            $token = md5($userID + time());
+            $tokenInfo = ['uid' => $userID, 'token' => $token];
+            $result = array('ret' => 0, 'data' => $tokenInfo);
+            $publisherToken = md5($userID + $token);
+            $_SESSION['brusherToken'] = $publisherToken;
+            $_SESSION['bursherExpire'] = time();
+            $this->result = $result;
+            $this->jsonOutput();
+        }
+    }
+
+    public function login2()
+    {
+        $mobile = $this->input->post('mobile');
+        $pwd = $this->input->post('pwd');
+        if (strlen($mobile) == 0) {
+            $result = array('ret' => -1, 'msg' => '帐号不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (strlen($pwd) == 0) {
+            $result = array('ret' => -1, 'msg' => '密码不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        $this->load->model('brusher_user_model');
+        $data = $this->brusher_user_model->login2($mobile, $pwd);
+        if (count($data) == 0) {
+            $result = array('ret' => -1, 'msg' => '帐号不存在或者密码错误');
             $this->result = $result;
             $this->jsonOutput();
         } else {

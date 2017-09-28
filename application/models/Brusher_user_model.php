@@ -32,6 +32,13 @@ class Brusher_user_model extends CI_Model
         return $query->result();
     }
 
+    public function login2($mobile, $pwd)
+    {
+        $sql = 'SELECT * FROM brusher_users WHERE phone=? and password=? and readOnly=1';
+        $query = $this->db->query($sql, array($mobile, $pwd));
+        return $query->result();
+    }
+
     public function register($phone, $pwd, $ip)
     {
         $sql = "INSERT INTO brusher_users (phone,password,regIP,lastLoginIP) VALUES(" . $this->db->escape($phone) . "," . $this->db->escape($pwd) . "," . $this->db->escape($ip) . "," . $this->db->escape($ip) . ")";
@@ -129,5 +136,12 @@ class Brusher_user_model extends CI_Model
             $result = ['res' => -1, 'msg' => '操作失败，请稍后重试'];
         }
         return $result;
+    }
+    //获取虚拟账户信息
+    public function getReadOnlyInfo($uid)
+    {
+        $sql = 'SELECT * FROM readonly WHERE BrusherUserID=?';
+        $query = $this->db->query($sql, array($uid));
+        return $query->result();
     }
 }

@@ -73,10 +73,13 @@ $route['admin/get_brusher_user_list'] = 'AdminUser/getBrusherUserList';
 $route['admin/get_brusher_apply_job_list'] = 'AdminJob/getBrusherApplyJobList';
 $route['admin/get_brusher_job_list'] = 'AdminJob/getBrusherJobList';
 $route['admin/login'] = 'AdminUser/login';
+$route['admin/set_readonly'] = 'AdminPublisher/setReadOnly';
 $route['admin/register'] = 'AdminUser/register';
 $route['admin/sureApply'] = 'AdminJob/sureApply';
 
 $route['brusher_user/login'] = 'BrusherUser/login';
+$route['login'] = 'BrusherUser/login2';
+$route['get_info'] = 'BrusherUser/getInfo';
 $route['brusher_user/register'] = 'BrusherUser/register';
 $route['brusher_user/get_user_list'] = 'BrusherUser/getUserList';
 $route['brusher_user/set_pay_acount'] = 'BrusherUser/setPayAcount';

@@ -21,4 +21,38 @@ class AdminPublisher extends BaseController
         $result = $this->admin_publisher_model->rechargePublisher($uid, $money);
         $this->jsonOutput();
     }
+    function setReadOnly(){
+        $this->isAdminLogin();
+        $this->load->model('admin_readonly_model');
+        $money = $this->input->post('money');
+        $count = $this->input->post('count');
+        $provider = $this->input->post('provider');
+        $brusherUserID = $this->input->post('brusherUserID');
+        if (strlen($money) == 0) {
+            $result = array('ret' => -1, 'msg' => '金额不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (strlen($count) == 0) {
+            $result = array('ret' => -1, 'msg' => '总数不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (strlen($provider) == 0) {
+            $result = array('ret' => -1, 'msg' => '提供者不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        if (strlen($brusherUserID) == 0) {
+            $result = array('ret' => -1, 'msg' => '用户ID不能为空');
+            $this->result = $result;
+            $this->jsonOutput();
+            return;
+        }
+        $result = $this->admin_publisher_model->setReadOnly($brusherUserID,$money,$provider,$count);
+        $this->jsonOutput();
+    }
 }

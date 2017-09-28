@@ -28,6 +28,7 @@ class BaseController extends CI_Controller
             'http://s.runningdreamer.com',
             'http://p.runningdreamer.com',
             'http://a.runningdreamer.com',
+            'http://120.24.102.79:7777',
         );
         if(in_array($origin, $allow_origin)){
             $this->output->set_header('Access-Control-Allow-Origin:'.$origin);
